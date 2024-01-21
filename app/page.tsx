@@ -38,15 +38,15 @@ const ContactForm = () => {
         },
     });
 
-    // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
         try {
-            console.log(values)
+            const res = await fetch("api", {
+                method: "POST",
+                body: JSON.stringify(values)
+            })
+            const data  = await res.json()
         } catch (error) {
-            console.log(error)
-            
+            console.error(error)
         }
     }
 
