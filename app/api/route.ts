@@ -15,8 +15,11 @@ export async function POST(request: NextRequest, response: NextResponse) {
         } = await request.json();
         console.log(name, email, address, country, state, message)
         await connectToMongo();
+        console.log("Debug: Creating item")
         await ContactModel.create({ name, email, address, country, state, message })
+        console.log("Debug: Item Created")
         await mongoose.connection.close();
+        console.log("Debug: Connection Closed")
         return NextResponse.json({
             message: "Message sent succesfully"
         }, { status: 200 })
