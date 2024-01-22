@@ -15,6 +15,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
+import displaySuccessMessage from "@/components/success-message";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -45,7 +46,12 @@ const ContactForm = () => {
                 body: JSON.stringify(values)
             })
             const data  = await res.json()
-            console.log(data)
+
+            if (res.ok) {
+                displaySuccessMessage("Form has been submitted")
+            } else {
+                console.error("Form submission failed", data)
+            }
         } catch (error) {
             console.error(error)
         }
