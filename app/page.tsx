@@ -1,6 +1,5 @@
 "use client"
 
-import mongoose from "mongoose";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +14,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import displaySuccessMessage from "@/components/success-message";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -27,6 +26,10 @@ const formSchema = z.object({
 });
 
 const ContactForm = () => {
+
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [message, setMessage] = useState('');
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -48,11 +51,15 @@ const ContactForm = () => {
             const data  = await res.json()
 
             if (res.ok) {
-                displaySuccessMessage("Form has been submitted")
+                setIsSuccess(true)
+                setMessage("Form has been submitted")
             } else {
-                console.error("Form submission failed", data)
+                setIsSuccess(false)
+                setMessage("Form submission failed")
             }
         } catch (error) {
+            setIsSuccess(false)
+            setMessage("Another error occured during submission")
             console.error(error)
         }
     }
@@ -142,6 +149,10 @@ const ContactForm = () => {
             <Button type="submit">Submit</Button>
         </form>
       </Form>
+      {isSuccess && (
+        <div>Form has been submitted</div>
+      )}
+        
     </div>
   )
 
